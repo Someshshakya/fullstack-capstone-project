@@ -1,9 +1,14 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 
 // MongoDB connection URL with authentication options
-let url = `${process.env.MONGO_URL}`;
+let url = process.env.MONGO_URL;
+if (!url) {
+    console.error('MONGO_URL is not set. Create util/import-mongo/.env with your MongoDB connection string.');
+    process.exit(1);
+}
 let filename = `${__dirname}/gifts.json`;
 const dbName = 'giftdb';
 const collectionName = 'gifts';
